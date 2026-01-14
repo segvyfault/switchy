@@ -19,3 +19,10 @@ the command syntax is pretty simple
 ## Goals
 - [x] none i thibk
 - [ ] oh i actually need to move those config files and data files to ~/.config/switchy thing
+
+## How to compile
+
+1. ``git clone https://github.com/segvyfault/switchy``
+2. ``cd switchy``
+3. ``go mod tidy``
+4. ``go build -o switchy -ldflags "-s -w" main.go`` (the ldflag thing is to reduce file size, you can use strip command instead if you want)
