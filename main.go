@@ -51,7 +51,26 @@ func parse_config(contents string) []string {
 	return papers
 }
 
-func execute(config []string, previous string) {
+func parse_actions() *[][]string {
+	contents := read_file("~/.paperactions");
+	if contents == "" { return nil }
+
+	read := strings.Split(contents, "\n");
+
+	if read[len(read) - 1] == "" {
+		read = read[:len(read) - 1]	
+	}
+
+	var actions [][]string 
+
+	for i := range len(read) {
+		actions = append(actions, strings.Split(read[i], " "))	
+	}
+
+	return &actions
+}
+
+func execute(config []string, previous string, actions *[][]string) {
 	next_index := 0;
 
 	if previous != "" {
@@ -79,22 +98,33 @@ func execute(config []string, previous string) {
 		matugen.Process.Release()
 	}
 
-	kitty := exec.Command("kitty", "+kitten", "themes", "--reload-in=all", "matugen");
-	log.Println("Executing", kitty.Args);
-	if err := kitty.Run(); err == nil {
-		kitty.Process.Release()
-	}
+	if actions != nil {
+		for i := range len(*actions) {
+			action := (*actions)[i];
+			program := action[0];
+			args := action[1:];
 
-	makoctl := exec.Command("makoctl", "reload");
-	log.Println("Executing", makoctl.Args);
-	if err := makoctl.Run(); err == nil {
-		makoctl.Process.Release()
-	}
+			var dontWaitForEnd bool  = false;
+			var err            error = nil;
 
-	svbar := exec.Command("svbar");
-	log.Println("Executing svbar");
-	if err := svbar.Start(); err == nil {
-		svbar.Process.Release()
+			if args[len(args) - 1] == "nowait" {
+				dontWaitForEnd = true;	
+				args = action[:len(args) - 1]
+			}
+
+			cmd := exec.Command(program, args...);
+			log.Println("Executing", cmd.Args);
+
+			if dontWaitForEnd { 
+				err = cmd.Start(); 
+			} else { 
+				err = cmd.Run();
+			}
+
+			if err == nil {
+				cmd.Process.Release()
+			}
+		}
 	}
 
 	if len(os.Args) <= 1 || (len(os.Args) > 1 && os.Args[1] != "no-write") {
@@ -128,5 +158,5 @@ func main() {
 	}
 
 	var previous string = read_file("~/.paper");
-	execute(parsed, previous)
+	execute(parsed, previous, parse_actions())
 }
