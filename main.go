@@ -71,14 +71,19 @@ func parse_actions() *[][]string {
 }
 
 func execute(config []string, previous string, actions *[][]string) {
+	isNoWrite := len(os.Args) > 1 && os.Args[1] == "no-write";
 	next_index := 0;
 
 	if previous != "" {
 		for i := range len(config) {
 			if strings.HasPrefix(config[i], previous) {
-				next_index = i + 1;
-				if next_index >= len(config) {
-					next_index = 0
+				if isNoWrite {
+					next_index = i;
+				} else {
+					next_index = i + 1;
+					if next_index >= len(config) {
+						next_index = 0
+					}
 				}
 				break;
 			}
@@ -127,7 +132,7 @@ func execute(config []string, previous string, actions *[][]string) {
 		}
 	}
 
-	if len(os.Args) <= 1 || (len(os.Args) > 1 && os.Args[1] != "no-write") {
+	if len(os.Args) <= 1 || isNoWrite {
 		write_new_bg(text[0])
 	}
 }
