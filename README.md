@@ -5,9 +5,9 @@ simple wallpaper switcher
 
 so you have like 3 files
 
-- ``$HOME/.papers`` \- (must have that) file where you have all of the wallpaper paths, you can also pass args to matugen after the path
-- ``$HOME/.paperactions`` \- (optional) file where you can store additional actions after the wallpaper has been set (for example reloading kitty themes)
-- ``$HOME/.paper`` \- stores last used wallpaper path
+- ``$HOME/.config/switchy/papers`` \- (must have that) file where you have all of the wallpaper paths, you can also pass args to matugen after the path
+- ``$HOME/.config/switchy/paperactions`` \- (optional) file where you can store additional actions after the wallpaper has been set (for example reloading kitty themes)
+- ``$HOME/.config/switchy/paper`` \- stores last used wallpaper path
 
 the command syntax is pretty simple
 
@@ -18,7 +18,7 @@ the command syntax is pretty simple
 
 ## Goals
 - [x] none i thibk
-- [ ] oh i actually need to move those config files and data files to ~/.config/switchy thing
+- [x] move config garbage to ~/.config/switchy 
 
 ## How to compile
 
