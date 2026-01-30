@@ -3,10 +3,10 @@ simple wallpaper switcher
 
 ## Usage info
 
-so you have like 3 files
+so you have like 2 files  
+one of them is swichy's internal usage one
 
 - ``$HOME/.config/switchy/papers`` \- (must have that) file where you have all of the wallpaper paths, you can also pass args to matugen after the path
-- ``$HOME/.config/switchy/paperactions`` \- (optional) file where you can store additional actions after the wallpaper has been set (for example reloading kitty themes)
 - ``$HOME/.config/switchy/paper`` \- stores last used wallpaper path
 
 the command syntax is pretty simple
@@ -25,4 +25,4 @@ the command syntax is pretty simple
 1. ``git clone https://github.com/segvyfault/switchy``
 2. ``cd switchy``
 3. ``go mod tidy``
-4. ``go build -o switchy -ldflags "-s -w" main.go`` (the ldflag thing is to reduce file size, you can use strip command instead if you want)
+4. ``go build . && strip switchy`` (strip command to reduce the executable size)
