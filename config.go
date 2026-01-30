@@ -14,7 +14,6 @@ const CONFIG_PREFIX = "~/.config/switchy/";
 type Config struct {
 	current string;   // current wallpaper
 	papers []string;  // list of wallpapers
-	actions *[][]string; // list of actions when switching
 }
 
 func expand_home(path string) string {
@@ -53,25 +52,6 @@ func (c *Config) parse_config(contents string) []string {
 	}
 
 	return papers
-}
-
-func (c *Config) parse_actions() *[][]string {
-	contents := read_file(CONFIG_PREFIX + "paperactions");
-	if contents == "" { return nil }
-
-	read := strings.Split(contents, "\n");
-
-	if read[len(read) - 1] == "" {
-		read = read[:len(read) - 1]	
-	}
-
-	var actions [][]string 
-
-	for i := range len(read) {
-		actions = append(actions, strings.Split(read[i], " "))	
-	}
-
-	return &actions
 }
 
 func (c *Config) parse_wallpapers() error {
@@ -125,7 +105,6 @@ func parse_all() Config {
 	}
 
 	c.current = read_file(CONFIG_PREFIX + "paper")
-	c.actions = c.parse_actions()
 
 	return c
 }

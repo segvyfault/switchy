@@ -40,35 +40,6 @@ func execute(config Config) {
 		matugen.Process.Release()
 	}
 
-	if config.actions != nil {
-		for i := range len(*config.actions) {
-			action := (*config.actions)[i];
-			program := action[0];
-			args := action[1:];
-
-			var dontWaitForEnd bool  = false;
-			var err            error = nil;
-
-			if args[len(args) - 1] == "nowait" {
-				dontWaitForEnd = true;	
-				args = action[:len(args) - 1]
-			}
-
-			cmd := exec.Command(program, args...);
-			log.Println("Executing", cmd.Args);
-
-			if dontWaitForEnd { 
-				err = cmd.Start(); 
-			} else { 
-				err = cmd.Run();
-			}
-
-			if err == nil {
-				cmd.Process.Release()
-			}
-		}
-	}
-
 	if len(os.Args) <= 1 || isNoWrite {
 		config.write_new_bg(text[0])
 	}
